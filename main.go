@@ -21,7 +21,11 @@ func main() {
 	// if err := http.ListenAndServe("localhost:8000", nil); err != nil {
 	// 	log.Fatal(err)
 	// }
-	fcgi.Serve(l, nil)
+	err = fcgi.Serve(l, nil)
+	if err != nil {
+		log.Println(err)
+	}
+
 }
 
 //ImageSaveHandler is save png
