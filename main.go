@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
+	"net/http/fcgi"
 	"strings"
 	"time"
 
@@ -11,16 +13,29 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe("localhost:8000", nil))
+	l, err := net.Listen("tcp", ":8000")
+	if err != nil {
+		return
+	}
+	http.HandleFunc("/", ImageSaveHandler)
+	// if err := http.ListenAndServe("localhost:8000", nil); err != nil {
+	// 	log.Fatal(err)
+	// }
+	fcgi.Serve(l, nil)
 }
 
-func handler(rw http.ResponseWriter, req *http.Request) {
-	rw = NewHead(rw)
+//ImageSaveHandler is save png
+func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
+	rw.Header().Set("Access-Control-Allow-Origin", "*")
+	rw.Header().Set("Access-Control-Allow-Credentials", "true")
+	rw.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+	rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
 	if req.Method == "OPTIONS" {
 		s := req.Header.Get("Access-Control-Request-Headers")
-		if strings.Contains(s, "authorization") == true || strings.Contains(s, "Authorization") == true {
+		log.Println(s)
+		if strings.Contains(strings.ToLower(s), "authorization") {
 			rw.WriteHeader(204)
+			return
 		}
 		rw.WriteHeader(400)
 		return
@@ -29,25 +44,26 @@ func handler(rw http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
 		img, err := imageupload.Process(req, "file")
 		if err != nil {
-			fmt.Printf("Process :%s", err)
+			log.Printf("Process :%s", err)
+			rw.WriteHeader(501)
 			return
 		}
 		thumb, err := imageupload.ThumbnailPNG(img, 300, 300)
 		if err != nil {
-			fmt.Printf("ThumbanilPNG :%s", err)
+			log.Printf("ThumbanilPNG :%s", err)
+			rw.WriteHeader(501)
 			return
 		}
-		thumb.Save(fmt.Sprintf("%d.png", time.Now().Unix()))
+
+		err = thumb.Save(fmt.Sprintf("%d.png", time.Now().Unix()))
+		if err != nil {
+			log.Printf("save :%s", err)
+			rw.WriteHeader(501)
+			return
+		}
 		return
 	}
-}
-
-//NewHead is request header create
-func NewHead(rw http.ResponseWriter) http.ResponseWriter {
-	rw.Header().Set("Access-Control-Allow-Origin", "*")
-	rw.Header().Set("Access-Control-Allow-Credentials", "true")
-	rw.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
-	rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	rw.Header().Set("Content-Type", "application/json")
-	return rw
+	if req.Method != http.MethodPost {
+		return
+	}
 }
