@@ -38,10 +38,10 @@ func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
 		s := req.Header.Get("Access-Control-Request-Headers")
 		log.Println(s)
 		if strings.Contains(strings.ToLower(s), "authorization") {
-			rw.WriteHeader(204)
+			rw.WriteHeader(http.StatusNoContent)
 			return
 		}
-		rw.WriteHeader(400)
+		rw.WriteHeader(http.StatusNoContent)
 		return
 	}
 
@@ -49,20 +49,20 @@ func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
 		img, err := imageupload.Process(req, "file")
 		if err != nil {
 			log.Printf("Process :%s", err)
-			rw.WriteHeader(501)
+			rw.WriteHeader(http.StatusNoContent)
 			return
 		}
 		thumb, err := imageupload.ThumbnailPNG(img, 300, 300)
 		if err != nil {
 			log.Printf("ThumbanilPNG :%s", err)
-			rw.WriteHeader(501)
+			rw.WriteHeader(http.StatusNoContent)
 			return
 		}
 
 		err = thumb.Save(fmt.Sprintf("%d.png", time.Now().Unix()))
 		if err != nil {
 			log.Printf("save :%s", err)
-			rw.WriteHeader(501)
+			rw.WriteHeader(http.StatusNoContent)
 			return
 		}
 		return
