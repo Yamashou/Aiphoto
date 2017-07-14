@@ -1,0 +1,43 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;Aiphoto&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../app" />
+      <root url="file://$PROJECT_DIR$/../../../ast" />
+      <root url="file://$PROJECT_DIR$/../../../test" />
+      <root url="file://$PROJECT_DIR$/../../../cook" />
+      <root url="file://$PROJECT_DIR$/../../../golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../DeepLearning" />
+      <root url="file://$PROJECT_DIR$/../../../HelloWorld" />
+      <root url="file://$PROJECT_DIR$/../../../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../meru-page" />
+      <root url="file://$PROJECT_DIR$/../../../socialpoll" />
+      <root url="file://$PROJECT_DIR$/../../../grpc-cli" />
+      <root url="file://$PROJECT_DIR$/../../../RealWorldHTTP" />
+      <root url="file://$PROJECT_DIR$/../../../google.golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../gopl.io" />
+      <root url="file://$PROJECT_DIR$/../../../268addf823227eef6c3d8bd2a23b0795" />
+      <root url="file://$PROJECT_DIR$/../.." />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../app" />
+      <root url="file://$PROJECT_DIR$/../../../ast" />
+      <root url="file://$PROJECT_DIR$/../../../test" />
+      <root url="file://$PROJECT_DIR$/../../../cook" />
+      <root url="file://$PROJECT_DIR$/../../../golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../DeepLearning" />
+      <root url="file://$PROJECT_DIR$/../../../HelloWorld" />
+      <root url="file://$PROJECT_DIR$/../../../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../meru-page" />
+      <root url="file://$PROJECT_DIR$/../../../socialpoll" />
+      <root url="file://$PROJECT_DIR$/../../../grpc-cli" />
+      <root url="file://$PROJECT_DIR$/../../../RealWorldHTTP" />
+      <root url="file://$PROJECT_DIR$/../../../google.golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../gopl.io" />
+      <root url="file://$PROJECT_DIR$/../../../268addf823227eef6c3d8bd2a23b0795" />
+      <root url="file://$PROJECT_DIR$/../.." />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>
