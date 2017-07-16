@@ -1,23 +1,24 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
-	"time"
 )
 
 //Photo is image data struct
 type Photo struct {
-	Id        int32     `json:"id"`
-	Lat       string    `json:"lat"`
-	Title     string    `json:"title"`
-	Region    string    `json:"region"`
-	Season    string    `json:"season"`
-	Era       string    `json:"era"`
-	Image     string    `json:"image"`
-	GetType   string    `json:"gettype"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID        int            `json:"id"`
+	Lat       sql.NullString `json:"lat"`
+	Title     sql.NullString `json:"title"`
+	Long      sql.NullString `json:"long"`
+	Region    sql.NullString `json:"region"`
+	Season    sql.NullString `json:"season"`
+	Era       sql.NullString `json:"era"`
+	Image     sql.NullString `json:"image"`
+	GetType   sql.NullString `json:"get_type"`
+	CreateAt  string         `json:"create_at"`
+	UpdatedAt string         `json:"updated_at"`
 }
 
 //Photos ....
