@@ -35,3 +35,12 @@ func main() {
 	}
 	return
 }
+
+func ConectDB() *sql.DB {
+	dbconf := "user:pass@tcp(mysql:3306)/db"
+	db, err := sql.Open("mysql", dbconf)
+	if err != nil {
+		log.Fatalf("ERROR: %v", err)
+	}
+	return db
+}

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -15,12 +14,7 @@ func getImageHeader(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
 	w.Header().Set("Access-Control-Allow-Methods", ", GET")
-	dbconf := "user:pass@tcp(mysql:3306)/db"
-	db, err := sql.Open("mysql", dbconf)
-	if err != nil {
-		log.Fatalf("ERROR: %v", err)
-		return
-	}
+	db := ConectDB()
 	defer db.Close()
 	if req.Method == http.MethodGet {
 		params := req.URL.Query()
