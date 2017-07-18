@@ -18,16 +18,16 @@ func getImageHeader(w http.ResponseWriter, req *http.Request) {
 	defer db.Close()
 	if req.Method == http.MethodGet {
 		params := req.URL.Query()
-		lim, err := strconv.Atoi(params["lim"][0])
+		lim, err := strconv.Atoi(params.Get("lim"))
 		if err != nil {
 			lim = 10
 		}
-		page, err := strconv.Atoi(params["page"][0])
+		page, err := strconv.Atoi(params.Get("page"))
 		if err != nil {
 			page = 1
 		}
 		rows, err := db.Query("SELECT `id`, `lat`, `title`, `long`, `region`, `season`, `era`, `image`, `get_type`,`created_at`, `updated_at` FROM photos LIMIT ?,?;", (page-1)*lim, lim)
-		items := make([]Photo, 10)
+		items := make([]Photo, lim)
 		if err != nil {
 			log.Printf("SELECT LIST ERRER:%v", err)
 		}
