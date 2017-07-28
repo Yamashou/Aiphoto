@@ -28,8 +28,6 @@ func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if req.Method == http.MethodPost {
-		db := ConectDB()
-		defer db.Close()
 		img, err := imageupload.Process(req, "file")
 		if err != nil {
 			log.Printf("Process :%s", err)

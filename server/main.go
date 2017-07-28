@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 //Photo is image data struct
@@ -28,9 +30,11 @@ type Photos struct {
 }
 
 func main() {
-	http.HandleFunc("/", ImageSaveHandler)
-	http.HandleFunc("/list", getImageHeader)
-	if err := http.ListenAndServe(":8000", nil); err != nil {
+	r := mux.NewRouter()
+	r.HandleFunc("/", ImageSaveHandler).Methods(http.MethodPost)
+	r.HandleFunc("/list", getImageHeader).Methods(http.MethodGet)
+	r.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
+	if err := http.ListenAndServe(":8000", r); err != nil {
 		log.Fatal(err)
 	}
 	return
@@ -43,4 +47,8 @@ func ConectDB() *sql.DB {
 		log.Fatalf("ERROR: %v", err)
 	}
 	return db
+}
+
+func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Gorilla!\nNot Found\n"))
 }
