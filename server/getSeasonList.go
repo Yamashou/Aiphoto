@@ -10,12 +10,12 @@ import (
 )
 
 func getSeasonList(w http.ResponseWriter, r *http.Request) {
+	season := mux.Vars(r)["season"]
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
 	w.Header().Set("Access-Control-Allow-Methods", "GET")
 	params := r.URL.Query()
-	season := mux.Vars(r)["season"]
 	lim, err := strconv.Atoi(params.Get("lim"))
 	if err != nil {
 		lim = 10
