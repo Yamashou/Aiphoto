@@ -33,6 +33,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", ImageSaveHandler).Methods(http.MethodPost)
 	r.HandleFunc("/list", getImageHeader).Methods(http.MethodGet)
+	r.HandleFunc("/list/{season}", getSeasonList).Methods(http.MethodGet)
 	r.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
 	if err := http.ListenAndServe(":8000", r); err != nil {
 		log.Fatal(err)
