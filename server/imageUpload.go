@@ -35,15 +35,24 @@ func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
 	nowTime := time.Now().Unix()
 	filename := fmt.Sprintf("%d.png", nowTime)
 	// err = thumb.Save(filename)
-	uploadS3(filename, thumb.Data)
+	s3FileName, err := uploadS3(filename, thumb.Data)
 	if err != nil {
-		log.Printf("save :%s", err)
-		rw.WriteHeader(http.StatusNoContent)
-		return
+		panic(err)
+	}
+	db := ConectDB()
+	defer db.Close()
+	stmtIns, err := db.Prepare(fmt.Sprintf("INSERT INTO photos ( `lat`, `title`, `long`, `region`, `season`, `era`, `image`, `get_type`,`created_at`, `updated_at`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
+	if err != nil {
+		panic(err.Error())
+	}
+	defer stmtIns.Close()
+	_, err = stmtIns.Exec("37.485", "test", "139.958", "Aizu", "Summer", "2017", s3FileName, "remote_test", "2017/10/8", "2017/10/8")
+	if err != nil {
+		panic(err.Error())
 	}
 }
 
-func uploadS3(filename string, f []byte) error {
+func uploadS3(filename string, f []byte) (string, error) {
 	sess := session.Must(session.NewSession(&aws.Config{
 		Region: aws.String(os.Getenv("AWS_REGION")),
 	}))
@@ -61,9 +70,9 @@ func uploadS3(filename string, f []byte) error {
 		ACL:         aws.String("public-read-write"),
 	})
 	if err != nil {
-		return fmt.Errorf("failed to upload file, %v", err)
+		return "", fmt.Errorf("failed to upload file, %v", err)
 	}
 	fmt.Printf("file uploaded to, %s\n", result.Location)
 
-	return nil
+	return "aiphoto" + filename, nil
 }
