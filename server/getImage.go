@@ -25,7 +25,7 @@ func getImageHeader(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		page = 1
 	}
-	rows, err := db.Query("SELECT `id`, `lat`, `title`, `long`, `region`, `season`, `era`, `image`, `get_type`,`created_at`, `updated_at` FROM photos LIMIT ?,?;", (page-1)*lim, lim)
+	rows, err := db.Query("SELECT `id`, `lat`, `title`, `long`, `region`, `season`, `era`, `image`, `get_type`,`created_at`, `updated_at` FROM photos ORDER BY `id` DESC LIMIT ?,?;", (page-1)*lim, lim)
 	items := make([]Photo, lim)
 	if err != nil {
 		log.Printf("SELECT LIST ERRER:%v", err)
