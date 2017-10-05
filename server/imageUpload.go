@@ -53,7 +53,8 @@ func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
 
 func uploadS3(filename string, f []byte) (string, error) {
 	sess := session.Must(session.NewSession(&aws.Config{
-		Region: aws.String(os.Getenv("AWS_REGION")),
+		Region:           aws.String(os.Getenv("AWS_REGION")),
+		S3ForcePathStyle: aws.Bool(true),
 	}))
 	uploader := s3manager.NewUploader(sess)
 
