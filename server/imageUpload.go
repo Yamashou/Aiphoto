@@ -34,7 +34,6 @@ func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
 	}
 	nowTime := time.Now().Unix()
 	filename := fmt.Sprintf("%d.png", nowTime)
-	// err = thumb.Save(filename)
 	s3FileName, err := uploadS3(filename, thumb.Data)
 	if err != nil {
 		panic(err)
