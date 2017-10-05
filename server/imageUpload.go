@@ -34,8 +34,8 @@ func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
 	}
 	nowTime := time.Now().Unix()
 	filename := fmt.Sprintf("%d.png", nowTime)
-	err = thumb.Save(filename)
-	uploadS3(filename)
+	// err = thumb.Save(filename)
+	uploadS3(filename, thumb.Data)
 	if err != nil {
 		log.Printf("save :%s", err)
 		rw.WriteHeader(http.StatusNoContent)
@@ -43,26 +43,14 @@ func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func uploadS3(filename string) error {
-	// The session the S3 Uploader will use
+func uploadS3(filename string, f []byte) error {
 	sess := session.Must(session.NewSession(&aws.Config{
 		Region: aws.String(os.Getenv("AWS_REGION")),
 	}))
-	// Create an uploader with the session and default options
 	uploader := s3manager.NewUploader(sess)
 
-	f, err := os.Open(filename)
-	if err != nil {
-		return fmt.Errorf("failed to open file %q, %v", filename, err)
-	}
-	defer f.Close()
-	fileInfo, _ := f.Stat()
-	size := fileInfo.Size()
-	buffer := make([]byte, size) // read file content to buffer
-
-	f.Read(buffer)
-	fileBytes := bytes.NewReader(buffer)
-	fileType := http.DetectContentType(buffer)
+	fileBytes := bytes.NewReader(f)
+	fileType := http.DetectContentType(f)
 
 	// Upload the file to S3.
 	result, err := uploader.Upload(&s3manager.UploadInput{
@@ -76,5 +64,6 @@ func uploadS3(filename string) error {
 		return fmt.Errorf("failed to upload file, %v", err)
 	}
 	fmt.Printf("file uploaded to, %s\n", result.Location)
+
 	return nil
 }
