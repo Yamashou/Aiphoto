@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	imageupload "github.com/olahol/go-imageupload"
 )
 
 //Photo is image data struct
@@ -21,6 +22,13 @@ type Photo struct {
 	GetType   sql.NullString `json:"get_type"`
 	CreateAt  string         `json:"create_at"`
 	UpdatedAt string         `json:"updated_at"`
+}
+
+type Upload struct {
+	Title string `json:"title"`
+	Lat   string `json:"lat"`
+	Long  string `json:"long"`
+	Image string `json:"image"`
 }
 
 //Photos ....
@@ -52,4 +60,14 @@ func ConectDB() *sql.DB {
 
 func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Gorilla!\nNot Found\n"))
+}
+
+func NewUpload(bs []byte, filename string) *imageupload.Image {
+	img := &imageupload.Image{
+		Filename:    filename,
+		ContentType: "image/png",
+		Data:        bs,
+		Size:        len(bs),
+	}
+	return img
 }
