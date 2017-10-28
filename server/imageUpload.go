@@ -52,7 +52,7 @@ func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
 	}
 	defer stmtIns.Close()
 
-	_, err = stmtIns.Exec("37.485", "test", "139.958", "Aizu", "Summer", "2017", s3FileName, "remote_test", "2017/10/8", "2017/10/8")
+	_, err = stmtIns.Exec(m.Lat, m.Title, m.Long, "Aizu", getSeason(m.Date), string(m.Date.Year()), s3FileName, "remote_test", time.Now(), time.Now())
 	if err != nil {
 		panic(err.Error())
 	}
@@ -88,4 +88,37 @@ func uploadS3(filename string, f []byte) (string, error) {
 func base64StringtoByte(s string) []byte {
 	r, _ := base64.StdEncoding.DecodeString(s)
 	return r
+}
+
+func getSeason(t time.Time) string {
+	if isSpling(t) {
+		return "Spling"
+	} else if isSummer(t) {
+		return "Summer"
+	} else if isFall(t) {
+		return "Fall"
+	} else if isWinter(t) {
+		return "Winter"
+	}
+	return time.Now().Month().String()
+}
+
+func isSpling(t time.Time) bool {
+	month := t.Month()
+	return month == time.May || month == time.April || month == time.March
+}
+
+func isSummer(t time.Time) bool {
+	month := t.Month()
+	return month == time.August || month == time.July || month == time.June
+}
+
+func isFall(t time.Time) bool {
+	month := t.Month()
+	return month == time.November || month == time.October || month == time.September
+}
+
+func isWinter(t time.Time) bool {
+	month := t.Month()
+	return month == time.February || month == time.January || month == time.December
 }

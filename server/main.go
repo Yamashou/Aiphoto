@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	imageupload "github.com/olahol/go-imageupload"
@@ -25,10 +26,11 @@ type Photo struct {
 }
 
 type Upload struct {
-	Title string `json:"title"`
-	Lat   string `json:"lat"`
-	Long  string `json:"long"`
-	Image string `json:"image"`
+	Title string    `json:"title"`
+	Lat   string    `json:"lat"`
+	Long  string    `json:"long"`
+	Image string    `json:"image"`
+	Date  time.Time `json:"date"`
 }
 
 //Photos ....
