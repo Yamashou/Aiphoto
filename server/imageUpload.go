@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -52,7 +53,14 @@ func ImageSaveHandler(rw http.ResponseWriter, req *http.Request) {
 	}
 	defer stmtIns.Close()
 
-	_, err = stmtIns.Exec(m.Lat, m.Title, m.Long, "Aizu", getSeason(m.Date), string(m.Date.Year()), s3FileName, "remote_test", time.Now(), time.Now())
+	t, err := strconv.ParseFloat(m.Date, 64)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(t / 1000)
+	dateU := time.Unix(int64(t)/1000, 0)
+	fmt.Println(dateU)
+	_, err = stmtIns.Exec(m.Lat, m.Title, m.Long, "Aizu", getSeason(dateU), string(dateU.Year()), s3FileName, "remote_test", time.Now(), time.Now())
 	if err != nil {
 		panic(err.Error())
 	}
